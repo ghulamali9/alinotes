@@ -1,0 +1,25 @@
+{% if authers %}
+{% for i in authers %}
+{% if i.is_deleted == False %}
+<tr>
+  <th scope="row">{{forloop.counter}}</th>
+  <td>{{i.auther_name}}</td>
+  <td>{{i.auther_email}}</td>
+  <td>
+    <button type="button" class="btn btn-warning show-form-update" data-toggle="modal" data-target="#modal-user" data-url="{% url 'auther-edit' i.id %}">
+      Edit
+    </button>
+  </td>
+  <td>
+    <button type="button" class="btn btn-danger show-form-delete" data-toggle="modal" data-target="#modal-user" data-url="{% url 'auther-delete' i.id %}">
+      Delete
+    </button>
+  </td>
+</tr>
+{% endif %}
+{% endfor %}
+{% else %}
+<tr>
+  <th colspan="3">No data to show</th>
+</tr>
+{% endif %}

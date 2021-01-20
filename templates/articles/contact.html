@@ -1,0 +1,83 @@
+{% extends 'articles/base.html' %}
+{% load crispy_forms_tags %}
+{% block key %}
+  <meta name="keywords" content="contact,alinotes,alinotes contact,ghulam ali, ghulamali909@gmail.com,ali">
+{% endblock %}
+{% block desc %}
+<meta name="description" content="How to contact with me.">
+{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="row py-3">
+      <div class="col-md-4">
+        <div class="container text-center">
+          <h2 class="mb-4 text-uppercase pb_letter-spacing-2">Contact Info</h2>
+           <ul class="list-unstyled ">
+               <li><i class="fa fa-map-marker mt-4 fa-2x" style="color:black;"></i>
+                   <p>Bahawal Nagar, Pakistan</p>
+               </li>
+
+               <li><i class="fa fa-phone mt-4 fa-2x" style="color:black;"></i>
+                   <p>+923063794828</p>
+               </li>
+
+               <li><i class="fa fa-envelope mt-4 fa-2x" style="color:black;"></i>
+                   <p>ghulamali909@gmail.com, ghulam.ali907@yahoo.com</p>
+               </li>
+           </ul>
+       </div>
+      </div>
+      <div class="col-md-8 text-center">
+        <h2 class="mb-4 text-uppercase pb_letter-spacing-2">Write us</h2>
+        <form class="my-ajax-form" method="POST" data-url='{{ request.build_absolute_uri|safe }}'>
+          {% csrf_token %}
+          {% crispy contact_form %}
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mapouter"><div class="gmap_canvas"><iframe width="1400" height="720" id="gmap_canvas" src="https://maps.google.com/maps?q=bahawal%20nagar&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.embedgooglemap.net/blog/nordvpn-coupon-code/">nord vpn promo code</a></div><style>.mapouter{position:relative;text-align:right;height:100%;width:100%;}.gmap_canvas {overflow:hidden;background:none!important;height:100%;width:100%;}</style></div>
+    </div>
+  </div>
+
+{% block JavaScript %}
+<script>
+
+  $(document).ready(function(){
+    var $myForm = $(".my-ajax-form");
+    $myForm.submit(function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      var $formData = $(this).serialize()
+      var $thisURL = $myForm.attr("data-url") || window.location.href
+
+      console.log($formData)
+      console.log($thisURL)
+      $.ajax({
+        method: "POST",
+        url: $thisURL,
+        data: $formData,
+        success: handleFormSuccess,
+            error: handleFormError,
+      })
+      function handleFormSuccess(data, textStatus, jqXHR){
+       console.log(data)
+       console.log(textStatus)
+       console.log(jqXHR)
+       $myForm[0].reset(); // reset form data
+       $('.alert-success'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+   }
+
+   function handleFormError(jqXHR, textStatus, errorThrown){
+       console.log(jqXHR)
+       console.log(textStatus)
+       console.log(errorThrown)
+        $('.alert-danger'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+   }
+    })
+  })
+  </script>
+
+{% endblock %}
+
+{% endblock %}

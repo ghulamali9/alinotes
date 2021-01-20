@@ -1,0 +1,50 @@
+{% load crispy_forms_tags %}
+<form method="post" class="update-form" enctype="multipart/form-data" data-url="{% url 'article-edit' form.instance.id %}">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Update Existing Auther</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-row">
+      <div class="col-md-6">
+        {{form.article_auther | as_crispy_field}}
+      </div>
+      <div class="col-md-6">
+        {{form.article_title | as_crispy_field}}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        {{form.article_keywords | as_crispy_field}}
+      </div>
+      <div class="col-md-6">
+        {{form.article_tags | as_crispy_field}}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        {{form.article_slug | as_crispy_field}}
+      </div>
+      <div class="col-md-6">
+        {{form.article_img | as_crispy_field}}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-12">
+        {{form.article_desc | as_crispy_field}}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-12">
+        {{form.article_content | as_crispy_field}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Edit Article</button>
+  </div>
+</form>

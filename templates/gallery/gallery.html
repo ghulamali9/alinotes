@@ -1,0 +1,49 @@
+{% extends 'articles/base.html' %}
+{% load static %}
+{% block key %}
+  <meta name="keywords" content="gallery,alinotes,alinotes gallery,ghulam ali, ghulamali909@gmail.com,ali">
+{% endblock %}
+{% block desc %}
+<meta name="description" content="My personal Photos collection">
+{% endblock %}
+{% block CSS %}
+<!-- Styles -->
+<link rel="stylesheet" href="{% static 'gallery/style.css' %}">
+{% endblock %}
+{% block content %}
+
+
+<div class="outer-container home-page">
+  <div class="container-fluid">
+      <div class="row">
+          {% for g in gallery %}
+          {% if g.is_deleted == False %}
+          <div class="col-12 col-md-6  col-lg-3 no-padding ">
+              <div class="portfolio-content">
+                  <figure>
+                      <img class="img-fluid bg-image" src="{{g.img_file.url}}" alt="{{g.img_title}}" >
+                  </figure>
+
+                  <div class="entry-content flex flex-column align-items-center justify-content-center">
+                      <h3><a href="#">Ali Notes</a></h3>
+
+                      <ul class="flex flex-wrap justify-content-center">
+                          <li><a href="#">{{g.created_at}}</a></li>
+                      </ul>
+                  </div><!-- .entry-content -->
+              </div><!-- .portfolio-content -->
+          </div><!-- .col -->
+          {% endif %}
+          {% endfor %}
+      </div><!-- .row -->
+  </div><!-- .container-fluid -->
+</div><!-- .outer-container -->
+
+<div class="scroll-down flex flex-column justify-content-center align-items-center d-none d-lg-block">
+  <span class="arrow-down flex justify-content-center align-items-center"><img src="{% static 'gallery/images/arrow-down.png' %}" alt="arrow"></span>
+</div><!-- .scroll-down -->
+{% endblock %}
+{% block JavaScript %}
+<script type='text/javascript' src="{% static 'gallery/js/jquery.js' %}"></script>
+<script type='text/javascript' src="{% static 'gallery/js/custom.js' %}"></script>
+{% endblock %}

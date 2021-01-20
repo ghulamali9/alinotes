@@ -1,0 +1,158 @@
+{% extends 'articles/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block key %}
+  <meta name="keywords" content="{{article.article_keywords}}">
+{% endblock %}
+{% block desc %}
+  <meta name="description" content="{{article.article_desc}}">
+{% endblock %}
+{% block content %}
+
+<!-- Posts Section -->
+<div class="row py-3">
+  <div class="col-lg-9 px-3">
+    <div class="container">
+      <div class="container-fluid py-1">
+        <h1 class="text-bold">
+          {{article.article_title}}
+        </h1>
+      </div>
+      <div class="container-fluid py-1">
+        <img src="{{article.article_img.url}}" alt="" class="img-fluid">
+      </div>
+      <div class="container-fluid py-1">
+        {{article.article_content | safe }}
+      </div>
+    </div>
+    <div class="container">
+      <h3 class="mb-4 text-uppercase pb_letter-spacing-2">Leave a comment</h3>
+      <form class="my-ajax-form" method="POST" data-url='{{ request.build_absolute_uri|safe }}'>
+        {% csrf_token %}
+        {% crispy form %}
+      </form>
+    </div>
+    <div class="container py-3">
+      <h3 class="mb-4 text-uppercase pb_letter-spacing-2">All comments</h3>
+      <div class="container" id="tableData">
+        {% for c in comments %}
+        <div class="row py-1">
+          <div class="col-12 px-0">
+            <div class="card card-white post rounded-0">
+                <div class="post-heading">
+                    <div class="float-left image">
+                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                    </div>
+                    <div class="float-left meta">
+                        <div class="title h5">
+                            <a href="#"><b>{{c.comments_persons_name}}</b></a>
+                            made a post.
+                        </div>
+                        <h6 class="text-muted time">{{c.created_at}}</h6>
+                    </div>
+                </div>
+                <div class="post-description">
+                    <p>{{c.comments_content}}</p>
+                </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+<!-- Side Section -->
+  <div class="col-lg-3 side">
+    {% include 'articles/parts/side-section.html' %}
+  </div>
+</div>
+
+{% block JavaScript %}
+<script>
+
+  $(document).ready(function(){
+    var $myForm = $(".my-ajax-form");
+    $myForm.submit(function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      var $formData = $(this).serialize()
+      var $thisURL = $myForm.attr("data-url") || window.location.href
+
+      console.log($formData)
+      console.log($thisURL)
+      $.ajax({
+        method: "POST",
+        url: $thisURL,
+        data: $formData,
+        success: handleFormSuccess,
+            error: handleFormError,
+      })
+      function handleFormSuccess(data, textStatus, jqXHR){
+       console.log(data)
+       console.log(textStatus)
+       console.log(jqXHR)
+       $myForm[0].reset(); // reset form data
+       $('.alert-success'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut();
+       ShowComments();
+   }
+
+   function handleFormError(jqXHR, textStatus, errorThrown){
+       console.log(jqXHR)
+       console.log(textStatus)
+       console.log(errorThrown)
+        $('.alert-danger'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+   }
+    })
+  })
+
+  //Fetch Comments
+  function ShowComments(){
+    $.ajax({
+      url: '/comments/{{article.article_slug}}',
+      dataType: 'json',
+      type: 'GET',
+      success: function(response){
+        tableFromResponse(response);
+        console.log("Data got successfully")
+      },
+      error: function(response){
+        console.log("Enable to get data");
+      }
+    });
+    function tableFromResponse(responseData) {
+      var mainObj = JSON.parse(responseData.data);
+        var k = '<div class="container px-0">'
+          for(i = 0;i < mainObj.length; i++){
+              k+= '<div class="row py-1">';
+                k+= '<div class="col-12 px-0">';
+                  k+= '<div class="card card-white post rounded-0">';
+                      k+= '<div class="post-heading">';
+                          k+= '<div class="float-left image">';
+                              k+= '<img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">';
+                          k+= '</div>';
+                          k+= '<div class="float-left meta">';
+                              k+= '<div class="title h5">';
+                                  k+= '<a href="#"><b>' + mainObj[i]["fields"]["comments_persons_name"] + '</b></a>';
+                                  k+= ' made a post.';
+                              k+= '</div>';
+                              k+= '<h6 class="text-muted time">' + mainObj[i]["fields"]["created_at"] + '</h6>';
+                          k+= '</div>';
+                      k+= '</div>';
+                      k+= '<div class="post-description">';
+                          k+= '<p>' + mainObj[i]["fields"]["comments_content"] + '</p>';
+                      k+= '</div>';
+                  k+= '</div>';
+                k+= '</div>';
+              k+= '</div>';
+          }
+          k+='</div>';
+          $('#tableData').html(k);
+    }
+  }
+
+  </script>
+{% endblock %}
+
+
+{% endblock %}

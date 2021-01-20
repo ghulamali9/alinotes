@@ -1,0 +1,32 @@
+{% if articles %}
+{% for i in articles %}
+{% if i.is_deleted == False %}
+<tr>
+  <th scope="row">{{forloop.counter}}</th>
+  <td>{{i.article_title}}</td>
+  <td>{{i.article_auther}}</td>
+  <td>{{i.article_desc}}</td>
+  <td>{{i.article_slug}}</td>
+  <td>
+    <div class="container">
+      <img src="{{i.article_img.url}}" alt="" class="img-fluid">
+    </div>
+  </td>
+  <td>
+    <button type="button" class="btn btn-warning show-form-update" data-toggle="modal" data-target="#modal-user" data-url="{% url 'article-edit' i.id %}">
+      Edit
+    </button>
+  </td>
+  <td>
+    <button type="button" class="btn btn-danger show-form-delete" data-toggle="modal" data-target="#modal-user" data-url="{% url 'article-delete' i.id %}">
+      Delete
+    </button>
+  </td>
+</tr>
+{% endif %}
+{% endfor %}
+{% else %}
+<tr>
+  <th colspan="3">No data to show</th>
+</tr>
+{% endif %}

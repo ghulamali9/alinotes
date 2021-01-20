@@ -1,0 +1,27 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark pb_navbar pb_scrolled-light" id="pb-navbar">
+  <div class="container">
+    <a class="navbar-brand d-xl-none d-lg-none d-md-block d-sm-block" href="{% url 'index' %}">
+      <img src="{% static 'images/restaurant/logo.png' %}" alt="Instant Logo" class="light">
+      <img src="{% static 'images/restaurant/logo-dark.png' %}" alt="Instant Logo" class="dark">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-navbar" aria-controls="probootstrap-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="ion-navicon"></i></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-md-center" id="probootstrap-navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-uppercase pb_letter-spacing-2" href="{% url 'index' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-uppercase pb_letter-spacing-2" href="{% url 'about' %}">About</a></li>
+        <li class="nav-item logo-center d-xl-block d-lg-block d-md-none d-sm-none d-none">
+          <a class="nav-link text-uppercase pb_letter-spacing-2" href="{% url 'index' %}">
+            <img src="{% static 'images/restaurant/logo.png' %}" alt="Instant Logo" class="light">
+            <img src="{% static 'images/restaurant/logo-dark.png' %}" alt="Instant Logo" class="dark">
+          </a>
+        </li>
+        <li class="nav-item"><a class="nav-link text-uppercase pb_letter-spacing-2" href="{% url 'gallery' %}">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link text-uppercase pb_letter-spacing-2" href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- END nav -->

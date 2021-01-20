@@ -1,0 +1,40 @@
+{% load static %}
+<div class="container-fluid pb-2">
+  <div class="row">
+    <div class="container pt-3">
+      <p class=" text-uppercase pb_letter-spacing-2">|Follow Us|</p>
+    </div>
+    <div class="col">
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="https://www.facebook.com/ghulam.ali.733076" class="p-2"><i class="fa fa-facebook"></i></a></li>
+        <li class="list-inline-item"><a href="https://twitter.com/ghulamali909" class="p-2"><i class="fa fa-twitter"></i></a></li>
+        <li class="list-inline-item"><a href="https://www.instagram.com/ghulamali909/" class="p-2"><i class="fa fa-instagram"></i></a></li>
+        <li class="list-inline-item"><a href="https://www.triobloggers.com/" class="p-2"><i class="fa fa-tripadvisor"></i></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container-fluid pb-2">
+  <div class="row">
+    <div class="container">
+      <p class=" text-uppercase pb_letter-spacing-2">|Profile|</p>
+    </div>
+    <div class="col">
+      <img src="{% static '/images/notes/444.jpg' %}" alt="" class="img-fluid w-auto border border-dark">
+    </div>
+  </div>
+</div>
+<div class="container-fluid pb-2">
+  <div class="row">
+    <div class="container">
+      <p class=" text-uppercase pb_letter-spacing-2">|Tags Cloud|</p>
+    </div>
+    <div class="col">
+      <ul class="nav nav-tabs border-remove nav-justified flex d-flex">
+        {% for mt in common_tags %}
+          <li class="m-1"><a class="tags border border-light p-1" href="{% url 'tags-search' mt.slug %}">{{mt.name}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

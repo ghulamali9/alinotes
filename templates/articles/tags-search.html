@@ -1,0 +1,64 @@
+{% extends 'articles/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Posts Section -->
+<div class="row py-3">
+  <div class="col-lg-9 px-3 ">
+    {% if articles %}
+    {% for i in articles %}
+    <div class="container py-3 my-2 " >
+      <div class="container-fluid">
+
+        <img class="img-fluid w-100" src="{{i.article_img.url}}" alt="Image caption here">
+      </div>
+        <div class="container-fluid">
+        <a href="#"><h2 class="mb-4 mt-2 text-uppercase pb_letter-spacing-2">{{i.article_title}}</h2></a>
+        <p>{{i.article_desc}}</p>
+        <a href="{% url 'article-details' i.article_slug %}">
+          <button type="button" class="btn pb_outline-dark pb_font-13 pb_letter-spacing-2  rounded-0">
+            <span class="btn btn-google">Read More <i class="fa fa-chevron-right"></i></span>
+          </button>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="container pt-3 justify-content-center">
+      <!-- Pagination -->
+      <nav aria-label="Page navigation example ">
+        <ul class="pagination justify-content-center d-flex">
+          {% if articles.has_previous %}
+            <li class="page-item">
+              <a class="page-link text-dark" href="?page={{article.Previous_page_number}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+          {% for p in articles.paginator.page_range %}
+          {% if articles.number == p %}
+            <li class="page-item "><a class="page-link text-dark activepg" href="?page={{p}}">{{p}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link text-dark" href="?page={{p}}">{{p}}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if articles.has_next %}
+            <li class="page-item">
+              <a class="page-link text-dark" href="?page={{article.next_page_number}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+      <!-- End Pagination -->
+    </div>
+  </div>
+<!-- Side Section -->
+  <div class="col-lg-3 side">
+    {% include 'articles/parts/side-section.html' %}
+  </div>
+</div>
+
+{% endblock %}

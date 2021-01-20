@@ -1,0 +1,6 @@
+var file;
+  $('#id_csv_file').on('change', function(){
+  file = event.target.files;
+});
+var data = new FormData($('#fileForm').get(0));
+  data.append('file', $('#id_csv_file')[0].files);

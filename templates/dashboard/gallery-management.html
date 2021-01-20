@@ -1,0 +1,176 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <h1 class="m-0 text-dark">Gallery</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="container">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-dark px-5" data-toggle="modal" data-target="#exampleModal">
+          Upload
+        </button>
+      </div>
+      <div class="container pt-2">
+        <div class="table-responsive-md">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date Uploaded</th>
+                <th scope="col">Image File</th>
+                <th scope="col" colspan="2">Action</th>
+              </tr>
+            </thead>
+            <tbody id = "user-table">
+              {% if gallery %}
+              {% for g in gallery %}
+              {% if g.is_deleted == False %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{g.img_title}}</td>
+                <td>{{g.created_at}}</td>
+                <td>
+                  <img src="{{g.img_file.url}}" class="img-fluid w-100" alt="">
+                </td>
+                <td>
+                  <button data-url="{% url 'gallery-edit' g.id %}" type="button" class="btn btn-warning show-form-update" data-toggle="modal" data-target="#modal-user" >
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button data-url="{% url 'gallery-delete' g.id %}" type="button" class="btn btn-warning show-form-delete" data-toggle="modal" data-target="#modal-user" >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="4">Not data to show</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Photos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-success"></div>
+        <div class="alert-danger"></div>
+        <form class="my-ajax-form" method="POST" enctype="multipart/form-data" data-url='{{ request.build_absolute_uri|safe }}'>
+            {% csrf_token %}
+          <div class="form-row">
+            <div class="col-md-12">
+              {{ form.img_title | as_crispy_field }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              {{ form.img_file | as_crispy_field }}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-12 ">
+              <button type="submit" class="btn btn-dark px-5">Upload</button>
+              <button type="reset" class="btn btn-dark px-5 ml-2">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+  <div class="modal fade" id="modal-user" tabindex="-1" role="dialog" aria-labelledby="modal-user" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="alert-success"></div>
+        <div class="alert-danger"></div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% block JavaScript %}
+  <script>
+  $(document).ready(function() {
+    var $myForm = $(".my-ajax-form");
+    $($myForm).ajaxForm(function() {
+        $myForm.submit(function(event){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        var $formData = $(this).serialize()
+        var $thisURL = $myForm.attr("data-url") || window.location.href
+
+        console.log($formData)
+        console.log($thisURL)
+        $.ajax({
+          method: "POST",
+          url: $thisURL,
+          data: $formData,
+          success: handleFormSuccess,
+          error: handleFormError,
+        })
+        function handleFormSuccess(data, textStatus, jqXHR){
+            $myForm[0].reset(); // reset form data
+            console.log(data)
+            console.log(textStatus)
+            console.log(jqXHR)
+
+            $('.alert-success'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+        }
+
+        function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+            $('.alert-danger'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+        }
+        })
+    });
+  });
+  </script>
+  <script src="{% static 'js/ajaxForm.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

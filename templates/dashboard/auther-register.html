@@ -1,0 +1,81 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <h1 class="m-0 text-dark">Auther Registration</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid px-5">
+      <div class="container justify-content-center px-5">
+          <div class="alert-success"></div>
+          <div class="alert-danger"></div>
+          <form class="my-ajax-form" method="POST" data-url='{{ request.build_absolute_uri|safe }}'>
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="col-md-6">
+                  {{ form.auther_name | as_crispy_field }}
+              </div>
+              <div class="col-md-6">
+                {{ form.auther_email | as_crispy_field }}
+              </div>
+            </div>
+            <div class="form-row justify-content-center">
+              <div class="col-md-6 justify-content-center text-center">
+                <button type="submit" class="btn btn-lg btn-dark px-5">Register</button>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </section>
+</div>
+{% block JavaScript %}
+<script>
+
+  $(document).ready(function(){
+    var $myForm = $(".my-ajax-form");
+    $myForm.submit(function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      var $formData = $(this).serialize()
+      var $thisURL = $myForm.attr("data-url") || window.location.href
+
+      console.log($formData)
+      console.log($thisURL)
+      $.ajax({
+        method: "POST",
+        url: $thisURL,
+        data: $formData,
+        success: handleFormSuccess,
+            error: handleFormError,
+      })
+      function handleFormSuccess(data, textStatus, jqXHR){
+       console.log(data)
+       console.log(textStatus)
+       console.log(jqXHR)
+       $myForm[0].reset(); // reset form data
+       $('.alert-success'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+   }
+
+   function handleFormError(jqXHR, textStatus, errorThrown){
+       console.log(jqXHR)
+       console.log(textStatus)
+       console.log(errorThrown)
+        $('.alert-danger'). addClass('alert'). html('submitted successfully!'). fadeIn().delay(4000).fadeOut()
+   }
+    })
+  })
+  </script>
+{% endblock %}
+{% endblock %}
